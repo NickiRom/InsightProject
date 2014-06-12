@@ -16,6 +16,10 @@ records that contain at least one instance of those fields.
 import requests
 import pandas as pd
 import json
+import pprint
+
+#Printer for debugging objects
+pp = pprint.PrettyPrinter(indent=4)
 
 
 
@@ -108,10 +112,13 @@ def runQuery(search="",count="", apiKey="", skip = -1, limit=-1, forceFields=Tru
             query += "&" 
         query += "limit=" + str(limit)
     
-    #Runs the request and sends it out
+    #Runs the request and gets text
     rtext = requests.get(query).text
-    mybuffer = open('lastQuery.json','w')
-    mybuffer.write(rtext)
+    
+    #Print out the text for a cache
+    open('lastQuery.json','w').write(rtext)
+    
+    #Return a python object
     return json.loads(rtext)
 
 
@@ -154,13 +161,6 @@ def chewDict( inputDict, setIgnorableKeys=set(), killNone = True):
     
     return returnDict
 
-'''
-def chewDrug(inputDict):
-    """Processes a drug entry, returns a dict of it"""
-    
-    In this case the chew
-'''
-
 
 #Process one array of results
 
@@ -168,19 +168,20 @@ def chewDrug(inputDict):
 #but to just get the data out of the API in the fastest way, I'm just going 
 #to hack it together here.
 
-#Temporary guy to debug
+#results = jsonResult["results"]
 
-jsonResult = json.loads( open("testOneResult.json",'r').read() )
+#Temporary guy to debug
+#jsonResult = json.loads( open("testOneResult.json",'r').read() )
+#results = [jsonResult]
+jsonResult = json.loads( open("lastQuery.json",'r').read() )
+results = jsonResult["results"]
 
 
 #types of keys to avoid
 specialReportKeys = set( ["patient"] )
 specialPatientKeys = set( ["reaction", "drug"] )
 specialDrugKeys = set( ["drugindication","medicinalproduct","openfda"] )
-
-#results = jsonResult["results"]
-results = [jsonResult]
-
+specialReactionKeys = set( ["reactionmeddrapt"] )
 
 #Set up some indices for the tables, will be MySQL indices for each entity
 currentReportIndex = 0;
@@ -191,15 +192,15 @@ currentIndicationIndex = 0;
 #Set up the dataframes to 
 reportDF = pd.DataFrame()
 drugReportDF = pd.DataFrame()
-rxnReportDF = pd.DataFrame()
-drugIndicationDF = pd.DataFrame()
+reactionReportDF = pd.DataFrame()
+
 
 drugsHash = {}
 reactionsHash = {}
 indicationsHash = {}
 
 for result in results:
-    reportDict = {}
+    reportDict = {} #the line that will go into the reports table
     drugDict = {} #may need this to be different
     reactionDict = {} #may need a list instead of a dict
     
@@ -212,35 +213,65 @@ for result in results:
     patientDict = chewDict( result["patient"], specialPatientKeys )
     reportDict.update(patientDict)
     
+    #At this point, everything in the report that is tied to the top level of
+    #the report is in the reportDict, so add that as a row to the report 
+    #DataFrame that will later be the table for MySQL
+    #This is extremely memory inefficient for large datasets, need to find
+    #a workaround
+    reportDF = reportDF.append(reportDict, ignore_index=True)
+    
+    
     #Process Drugs
     drugs = result["patient"]["drug"]
     
     for drug in drugs:
         
+        #if I can't find a medicinal product, I won't bother constructing the
+        #dict
+        if "medicinalproduct" not in drug:
+            continue
+
         #The main key here for all products
         drugName = drug["medicinalproduct"]
-        print drugName
         
+        #print "Entering drug " + drugName
+        #Sets up for the drug_id -> drug table and makes sure the drug_id 
+        #is unique to generate a normalized set of mysql tables later.
         if drugName not in drugsHash:
             #Initialize our drug in the drug hash
             currentDrugIndex += 1
             
-            drugsHash[drugName] = {"drug_id": currentDrugIndex,
-                                  "indications": set()}
+            drugsHash[drugName] = {"drug_id": currentDrugIndex}
         
+        drugDict["drug_id"] = drugsHash[drugName]["drug_id"]
+        
+        #I want to keep drug indication but to turn it into a normalized 
+        #table as well. Will add the indication to a set inside the 
+        #drugsHash as well for convenience, can decide later how to deal 
+        #with the data
         if "drugindication" in drug:
+            
             indication = drug["drugindication"]
+            if "indications" not in drugsHash[drugName]:
+                drugsHash[drugName]["indications"] = set()
             
             if indication not in indicationsHash:
                 currentIndicationIndex += 1
                 indicationsHash[indication] = {"indication_id": currentIndicationIndex}
         
-            drugDict["drugindication"] = currentIndicationIndex
+            drugsHash[drugName]["indications"].add(indication)
+            drugDict["indication_id"] = indicationsHash[indication]["indication_id"]
+            
+            
+        drugDict.update( chewDict(drug, specialDrugKeys) )
+        drugDict["report_id"] = currentReportIndex
         
-        
-        
-        
-        
+        #Drug entry should be ready for the MySQL table at this point, so 
+        #add it to the drug table
+        #This is extremely memory inefficient for large datasets, need to find
+        #a workaround
+        drugReportDF = drugReportDF.append(drugDict, ignore_index=True)
+        #pp.pprint(drugDict)
         
         
         #If there's an openFDA section, try and capture that information
@@ -261,9 +292,9 @@ for result in results:
             if "brand_name" in drug["openfda"]:
                 drugsHash[drugName]["openfdaBrandName"] = drug["openfda"]["brand_name"][0]          
             if "rxcui" in drug["openfda"]:
-                #I know that some drugs have more than one rxcui,
-                #I'm hoping that the first one will be sufficient to look up
-                #other information
+                #I know that some drugs have more than one rxcui.
+                #I'm hoping that the first one will be sufficient to look 
+                #up other information
                 drugsHash[drugName]["openfdaRxcui"] = drug["openfda"]["rxcui"][0]
                 if "openfdaAllRxcui" in drugsHash[drugName]:
                     drugsHash[drugName]["openfdaAllRxcui"].update(drug["openfda"]["rxcui"])
@@ -276,15 +307,62 @@ for result in results:
                 else:
                     drugsHash[drugName]["openfdaAllUnii"] = set(drug["openfda"]["unii"])
                     
-                #may want to figure out how to deal with SPL and NDC codes later
+                #may want to figure out how to deal with SPL and NDC codes 
+                #later
                 
-
+            #END OF OPENFDA DRUG SECTION
+        
+        #Need to set up the drugDict for the next entry in the drug section of
+        #the report
+        drugDict.clear()
+        
+        #END DRUG PROCESSING LOOP
     
     
-
+    #Process reactions
+    reactions = result["patient"]["reaction"]
+    
+    for reaction in reactions:
+        
+        #if the reaction doesn't have a name, skip the reaction entirely
+        if "reactionmeddrapt" not in reaction:
+            continue
+    
+        #The main key for a given reaction
+        reactionName = reaction["reactionmeddrapt"]
+        
+        
+        #Sets up for the reaction_id -> reaction table and makes sure the
+        #reaction_id is unique to each reaction name unique to generate 
+        #a normalized set of mysql tables later.
+        if reactionName not in reactionsHash:
+            #Initialize our reaction in the reactions hash
+            currentReactionIndex += 1
+            reactionsHash[reactionName] = {"reaction_id": currentReactionIndex}
+        
+        reactionDict["reaction_id"] = reactionsHash[reactionName]["reaction_id"]
+        
+         
+        reactionDict.update( chewDict(reaction, specialReactionKeys) )
+        reactionDict["report_id"] = currentReportIndex
+        
+        #Drug entry should be ready for the MySQL table at this point, so add
+        #it to the drug table
+        #This is extremely memory inefficient for large datasets, need to find
+        #a workaround
+        reactionReportDF = reactionReportDF.append(reactionDict, ignore_index=True)
+    
+        #Set up reactions dict for next cycle of the loop
+        
+        reactionDict.clear()
         
     
-    
+    reportDict.clear()
+
+print "REPORT TABLE:\n", reportDF
+print "DRUG TABLE:\n", drugReportDF
+print "REACTION TABLE:\n", reactionReportDF
+
     
 
 
