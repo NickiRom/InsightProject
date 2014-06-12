@@ -1,0 +1,861 @@
+{
+  "meta": {
+    "disclaimer": "openFDA is a beta research project and not for clinical use. While we make every effort to ensure that data is accurate, you should assume all results are unvalidated.",
+    "license": "http://open.fda.gov/license",
+    "last_updated": "2014-05-29",
+    "results": {
+      "skip": 0,
+      "limit": 3,
+      "total": 3643502
+    }
+  },
+  "results": [
+    {
+      "safetyreportid": "4595596-3",
+      "fulfillexpeditecriteria": "1",
+      "receivedateformat": "102",
+      "receiver": null,
+      "receiptdateformat": "102",
+      "receivedate": "20050224",
+      "primarysource": {
+        "qualification": "1"
+      },
+      "seriousnessother": "1",
+      "sender": {
+        "senderorganization": "FDA-Public Use"
+      },
+      "patient": {
+        "patientonsetage": "59",
+        "reaction": [
+          {
+            "reactionmeddrapt": "NEPHRITIS HAEMORRHAGIC"
+          }
+        ],
+        "patientonsetageunit": "801",
+        "drug": [
+          {
+            "drugauthorizationnumb": "21565",
+            "drugcharacterization": "1",
+            "medicinalproduct": "ORAL EPINASTINE"
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "ACETYLSALICYLIC ACID"
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "ASCORBIC ACID",
+            "openfda": {
+              "spl_id": [
+                "f67ce1df-27ea-4c67-a8a3-daf3fb3b9a92",
+                "72133842-ac3f-4a39-a825-38e01930a0a7"
+              ],
+              "product_ndc": [
+                "0389-0486",
+                "67457-118",
+                "67457-303"
+              ],
+              "route": [
+                "INTRAMUSCULAR",
+                "INTRAVENOUS",
+                "SUBCUTANEOUS"
+              ],
+              "substance_name": [
+                "ASCORBIC ACID"
+              ],
+              "rxcui": [
+                "308395"
+              ],
+              "spl_set_id": [
+                "a6c36a36-28ee-4a1b-86fe-98ef94064b68",
+                "d05200cb-cf29-4bc7-bf0c-b42ab2d20958"
+              ],
+              "package_ndc": [
+                "67457-118-50",
+                "0389-0486-50",
+                "67457-303-50"
+              ],
+              "product_type": [
+                "HUMAN PRESCRIPTION DRUG"
+              ],
+              "generic_name": [
+                "ASCORBIC ACID"
+              ],
+              "manufacturer_name": [
+                "The Torrance Company",
+                "Mylan Institutional LLC"
+              ],
+              "brand_name": [
+                "ASCORBIC ACID"
+              ]
+            }
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "TOCOPHERYL NICOTINATE"
+          }
+        ],
+        "patientsex": "2"
+      },
+      "receiptdate": "20050208",
+      "transmissiondate": "20050727",
+      "transmissiondateformat": "102",
+      "serious": "1",
+      "companynumb": "200501050"
+    },
+    {
+      "safetyreportid": "4597595-4",
+      "fulfillexpeditecriteria": "2",
+      "receivedateformat": "102",
+      "receiver": null,
+      "seriousnesslifethreatening": "1",
+      "receiptdateformat": "102",
+      "receivedate": "20050228",
+      "primarysource": {
+        "qualification": "1"
+      },
+      "sender": {
+        "senderorganization": "FDA-Public Use"
+      },
+      "patient": {
+        "patientonsetage": "48",
+        "reaction": [
+          {
+            "reactionmeddrapt": "BLOOD GLUCOSE INCREASED"
+          },
+          {
+            "reactionmeddrapt": "KETOACIDOSIS"
+          },
+          {
+            "reactionmeddrapt": "MENTAL STATUS CHANGES"
+          }
+        ],
+        "patientweight": "78",
+        "patientonsetageunit": "801",
+        "patientsex": "2",
+        "drug": [
+          {
+            "drugcharacterization": "1",
+            "drugindication": "BIPOLAR DISORDER",
+            "medicinalproduct": "SEROQUEL",
+            "drugadministrationroute": "048",
+            "drugdosagetext": "200 MG BID ORAL",
+            "openfda": {
+              "unii": [
+                "BGL0JSY5SI"
+              ],
+              "spl_id": [
+                "ac37e409-4b2b-4db7-86f6-3173c9410120"
+              ],
+              "product_ndc": [
+                "0310-0275",
+                "0310-0274",
+                "0310-0272",
+                "0310-0271",
+                "0310-0279",
+                "0310-0278"
+              ],
+              "substance_name": [
+                "QUETIAPINE FUMARATE"
+              ],
+              "rxcui": [
+                "317174",
+                "616489",
+                "284509",
+                "616485",
+                "616483",
+                "616487",
+                "153640",
+                "312743",
+                "153638",
+                "153639",
+                "312745",
+                "312744"
+              ],
+              "spl_set_id": [
+                "0584dda8-bc3c-48fe-1a90-79608f78e8a0"
+              ],
+              "product_type": [
+                "HUMAN PRESCRIPTION DRUG"
+              ],
+              "manufacturer_name": [
+                "AstraZeneca Pharmaceuticals LP"
+              ],
+              "brand_name": [
+                "SEROQUEL"
+              ],
+              "route": [
+                "ORAL"
+              ],
+              "nui": [
+                "N0000175430"
+              ],
+              "package_ndc": [
+                "0310-0275-39",
+                "0310-0274-60",
+                "0310-0278-34",
+                "0310-0279-10",
+                "0310-0278-10",
+                "0310-0275-34",
+                "0310-0278-39",
+                "0310-0272-10",
+                "0310-0275-10",
+                "0310-0279-39",
+                "0310-0274-39",
+                "0310-0271-39",
+                "0310-0272-39",
+                "0310-0271-10"
+              ],
+              "pharm_class_epc": [
+                "Atypical Antipsychotic [EPC]"
+              ],
+              "generic_name": [
+                "QUETIAPINE FUMARATE"
+              ],
+              "application_number": [
+                "NDA020639"
+              ]
+            }
+          },
+          {
+            "drugcharacterization": "1",
+            "drugindication": "POST-TRAUMATIC STRESS DISORDER",
+            "medicinalproduct": "SEROQUEL",
+            "drugadministrationroute": "048",
+            "drugdosagetext": "200 MG BID ORAL",
+            "openfda": {
+              "unii": [
+                "BGL0JSY5SI"
+              ],
+              "spl_id": [
+                "ac37e409-4b2b-4db7-86f6-3173c9410120"
+              ],
+              "product_ndc": [
+                "0310-0275",
+                "0310-0274",
+                "0310-0272",
+                "0310-0271",
+                "0310-0279",
+                "0310-0278"
+              ],
+              "substance_name": [
+                "QUETIAPINE FUMARATE"
+              ],
+              "rxcui": [
+                "317174",
+                "616489",
+                "284509",
+                "616485",
+                "616483",
+                "616487",
+                "153640",
+                "312743",
+                "153638",
+                "153639",
+                "312745",
+                "312744"
+              ],
+              "spl_set_id": [
+                "0584dda8-bc3c-48fe-1a90-79608f78e8a0"
+              ],
+              "product_type": [
+                "HUMAN PRESCRIPTION DRUG"
+              ],
+              "manufacturer_name": [
+                "AstraZeneca Pharmaceuticals LP"
+              ],
+              "brand_name": [
+                "SEROQUEL"
+              ],
+              "route": [
+                "ORAL"
+              ],
+              "nui": [
+                "N0000175430"
+              ],
+              "package_ndc": [
+                "0310-0275-39",
+                "0310-0274-60",
+                "0310-0278-34",
+                "0310-0279-10",
+                "0310-0278-10",
+                "0310-0275-34",
+                "0310-0278-39",
+                "0310-0272-10",
+                "0310-0275-10",
+                "0310-0279-39",
+                "0310-0274-39",
+                "0310-0271-39",
+                "0310-0272-39",
+                "0310-0271-10"
+              ],
+              "pharm_class_epc": [
+                "Atypical Antipsychotic [EPC]"
+              ],
+              "generic_name": [
+                "QUETIAPINE FUMARATE"
+              ],
+              "application_number": [
+                "NDA020639"
+              ]
+            }
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "SERTRALINE HCL"
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "METOCARBAMOL"
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "DICYCLOMINE",
+            "openfda": {
+              "unii": [
+                "4KV4X8IF6V"
+              ],
+              "spl_id": [
+                "ad8d8eca-e680-459b-81cb-84b58548f5d3",
+                "90275a6f-5479-4ddb-b71e-3295c947deba"
+              ],
+              "product_ndc": [
+                "0904-0195",
+                "0143-3126",
+                "0143-1227"
+              ],
+              "substance_name": [
+                "DICYCLOMINE HYDROCHLORIDE"
+              ],
+              "rxcui": [
+                "991061",
+                "991086"
+              ],
+              "spl_set_id": [
+                "5a553bda-1e3d-4b80-913f-73dd54655033",
+                "823052b8-1ee4-4628-aa97-b862406b0d75"
+              ],
+              "product_type": [
+                "HUMAN PRESCRIPTION DRUG"
+              ],
+              "manufacturer_name": [
+                "Major Pharmaceuticals",
+                "West-ward Pharmaceutical Corp"
+              ],
+              "brand_name": [
+                "DICYCLOMINE"
+              ],
+              "route": [
+                "ORAL"
+              ],
+              "nui": [
+                "N0000175574",
+                "N0000175370"
+              ],
+              "pharm_class_moa": [
+                "Cholinergic Antagonists [MoA]"
+              ],
+              "package_ndc": [
+                "0143-1227-01",
+                "0143-1227-10",
+                "0143-1227-25",
+                "0904-0195-60",
+                "0143-3126-01",
+                "0143-3126-10"
+              ],
+              "pharm_class_epc": [
+                "Anticholinergic [EPC]"
+              ],
+              "generic_name": [
+                "DICYCLOMINE HYDROCHLORIDE"
+              ],
+              "application_number": [
+                "ANDA040161"
+              ]
+            }
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "DIVALPROEX SODIUM",
+            "openfda": {
+              "spl_id": [
+                "f9c0e4bd-b347-4583-b978-698dc942db19",
+                "24552cf7-b191-4553-ad0a-3ebd211d2d16",
+                "e59211ce-f4e3-437c-966d-04855ac6f4e0",
+                "6316061c-9758-4f38-9cb2-7ca833dd20bf",
+                "438ce71d-cb1a-4066-9996-6edd18f4cab3",
+                "50bd09ee-3c0c-4153-9fb3-d2dd13cf9997",
+                "75ea8dc4-6627-4e92-8478-969b385327b3",
+                "be46bb22-4cac-4d48-94f8-e9057fc59139",
+                "3f944013-bad7-45f3-bf6a-eab39056b397",
+                "cce88ef2-4ebe-053d-1052-0715e59667e4",
+                "317203d3-584e-2fa6-8f7f-92f9060120a7",
+                "cf194488-da12-4e09-bee5-6e254a358884",
+                "f529f80c-0403-475e-8c01-d8f75988f46d",
+                "c63f181a-0b57-aaa0-e04c-ad7e6ca7649c",
+                "f5d92577-f51f-4dc1-8401-ab1ebccbdcec",
+                "b1b571ea-8447-4fc1-8dd1-16ae8211dbe1",
+                "dcc97541-c320-75e6-387a-ab4ba0aca6ba",
+                "c8458e63-55d9-4edc-a093-2e84e88c2e0e",
+                "64a1d251-fff5-41e8-bf15-b95b99e2b804",
+                "b7805d46-a021-4d16-a64d-5618ae88c2b4",
+                "31b60c05-b0ff-4772-82f7-8eba200d27eb",
+                "7e6ac2ff-631f-486d-b5ab-de7ce369f82f",
+                "48c2d96f-f9f5-4faa-a8c7-c6eaf666e837",
+                "509da994-97ab-4306-bbc4-df357939b7ab",
+                "adaf20cd-d5a4-4231-bd45-2598bf550aeb",
+                "bf372a2f-7f7c-45dc-963c-083c87feb354",
+                "bee2c182-1f98-4398-94b5-13656744b89f"
+              ],
+              "product_ndc": [
+                "64679-974",
+                "55111-534",
+                "0115-6911",
+                "55111-532",
+                "68382-106",
+                "55111-530",
+                "55111-533",
+                "68001-106",
+                "64679-975",
+                "0093-7440",
+                "0093-7441",
+                "55648-973",
+                "0378-0473",
+                "0378-0472",
+                "55648-974",
+                "55648-975",
+                "16714-513",
+                "16714-512",
+                "16714-511",
+                "55111-531",
+                "68180-265",
+                "68180-267",
+                "68180-266",
+                "64679-973",
+                "55111-529",
+                "65862-403",
+                "65862-402",
+                "65862-401",
+                "62756-798",
+                "62756-796",
+                "62756-797",
+                "0245-0180",
+                "0245-0181",
+                "0115-6922",
+                "0245-0182",
+                "68382-031",
+                "68382-032",
+                "68382-033",
+                "0093-7439",
+                "62037-667",
+                "51079-765",
+                "57237-048",
+                "51079-766",
+                "51079-475",
+                "51079-474",
+                "57237-046",
+                "57237-047",
+                "0378-1045",
+                "0378-1044",
+                "0378-1043",
+                "51079-767",
+                "0378-8008",
+                "68001-105",
+                "65841-635",
+                "65841-634",
+                "65841-637",
+                "65841-636",
+                "65841-639",
+                "65841-638"
+              ],
+              "route": [
+                "ORAL"
+              ],
+              "substance_name": [
+                "DIVALPROEX SODIUM"
+              ],
+              "rxcui": [
+                "1099563",
+                "1099596",
+                "1099569",
+                "1099870",
+                "1099625",
+                "1099678"
+              ],
+              "spl_set_id": [
+                "2e35f833-1cf7-12eb-9567-7a191e32e138",
+                "33798a7c-c5a9-49a5-be5d-1312910ef468",
+                "b367d81d-4eca-4e28-b490-34be4c003561",
+                "648859e7-659d-4a69-b3f2-ff84747ec200",
+                "f911748c-fb3a-fe1a-ab2a-4b40455e05ef",
+                "cd83f986-ec38-4e0e-aa03-3db5ad1629c6",
+                "dbd47222-14f1-4588-a009-9b81b55ca60d",
+                "00332c65-edad-a153-9c78-628931daa732",
+                "a221e493-2e44-4398-90dd-80b348f3f0c2",
+                "f23831e9-ef8e-4b4e-b5b3-dd01b76084f2",
+                "4f40e035-fdad-42c9-bd31-c1582215f83e",
+                "cdce6a8f-02fc-448c-9a81-3d904e49ef97",
+                "ed710c62-8ba6-4f19-b240-3ee73cd03d67",
+                "b0f33792-dd96-40cc-a28e-acdcdca2f4b8",
+                "fa823ee0-0c69-6b85-da1e-9bb2e2150ea5",
+                "53308478-d3e7-4770-86fd-be9bcc9bc17f",
+                "64797788-fdcb-4d12-a1a4-743ad71bd17b",
+                "f01e56a9-847e-4a68-93d2-f8741d0ec71c",
+                "18f7f458-9276-4e9d-94b2-99ca8dd4cebf",
+                "6316061c-9758-4f38-9cb2-7ca833dd20bf",
+                "15f8a5be-e269-2e07-60d9-1dd7bf5f5281",
+                "72d36e53-0af8-4008-af73-418934d86567",
+                "b26359c7-73fb-4397-8d18-5775b763e168",
+                "53c0aa44-940b-489c-90b6-058a6ee3d38d",
+                "1b12c694-e120-45f6-ad28-36373e2c5378",
+                "4a2b0442-c8f0-4c57-9206-323fbef1a877",
+                "7981f586-89c2-4ed3-874f-952c28c31cb1"
+              ],
+              "package_ndc": [
+                "0115-6922-02",
+                "65862-403-05",
+                "65862-403-01",
+                "0378-8008-01",
+                "55111-530-78",
+                "62756-796-83",
+                "51079-475-08",
+                "62756-796-88",
+                "0115-6922-01",
+                "0115-6911-02",
+                "65862-402-99",
+                "62756-797-83",
+                "62037-667-01",
+                "65862-401-71",
+                "51079-767-30",
+                "57237-046-05",
+                "62756-797-88",
+                "65841-634-05",
+                "62756-797-08",
+                "0378-0473-77",
+                "0115-6911-03",
+                "65862-403-10",
+                "64679-974-02",
+                "0093-7441-01",
+                "64679-974-04",
+                "64679-975-02",
+                "64679-975-01",
+                "0093-7441-05",
+                "65862-402-05",
+                "65862-402-01",
+                "16714-512-01",
+                "0115-6911-19",
+                "16714-512-02",
+                "55111-530-30",
+                "64679-973-04",
+                "65841-639-10",
+                "65841-638-01",
+                "68001-106-00",
+                "65841-638-05",
+                "65862-402-10",
+                "51079-765-56",
+                "57237-047-05",
+                "57237-048-01",
+                "55111-530-79",
+                "57237-047-01",
+                "57237-048-05",
+                "51079-474-20",
+                "65862-401-05",
+                "64679-973-02",
+                "0093-7439-01",
+                "65862-401-01",
+                "0378-8008-05",
+                "55111-529-01",
+                "16714-513-01",
+                "55111-532-30",
+                "0245-0182-01",
+                "0093-7440-01",
+                "0093-7440-05",
+                "68001-105-00",
+                "68001-105-03",
+                "0245-0180-01",
+                "55111-531-79",
+                "55111-531-78",
+                "0245-0182-89",
+                "0245-0181-11",
+                "68180-265-02",
+                "68382-106-77",
+                "0245-0181-15",
+                "62756-796-08",
+                "65841-636-01",
+                "65841-636-05",
+                "51079-475-01",
+                "65862-401-99",
+                "0245-0180-11",
+                "0115-6911-13",
+                "62756-796-18",
+                "62756-796-13",
+                "51079-767-56",
+                "64679-973-01",
+                "64679-973-03",
+                "65862-401-10",
+                "0245-0182-15",
+                "65841-635-05",
+                "0245-0182-11",
+                "65841-635-01",
+                "55648-975-03",
+                "55648-975-02",
+                "55648-975-01",
+                "0115-6911-01",
+                "0245-0180-15",
+                "55648-975-04",
+                "55111-530-01",
+                "65841-639-01",
+                "0245-0181-01",
+                "68180-267-01",
+                "55111-530-05",
+                "68180-267-03",
+                "68180-265-11",
+                "55111-529-78",
+                "55111-529-79",
+                "55111-531-05",
+                "51079-474-01",
+                "55111-531-01",
+                "65841-638-16",
+                "68180-266-11",
+                "51079-765-30",
+                "68382-032-01",
+                "68382-033-05",
+                "68382-032-05",
+                "68382-033-01",
+                "55648-973-01",
+                "55648-973-03",
+                "55648-973-02",
+                "65841-634-01",
+                "55648-973-04",
+                "62756-798-08",
+                "62756-798-88",
+                "55111-529-05",
+                "57237-046-01",
+                "62756-798-83",
+                "68382-106-10",
+                "55111-534-60",
+                "51079-765-08",
+                "0245-0181-89",
+                "51079-766-01",
+                "68180-266-03",
+                "65841-637-05",
+                "68180-266-01",
+                "51079-765-01",
+                "65841-637-01",
+                "51079-766-08",
+                "55111-534-05",
+                "0115-6922-13",
+                "55111-534-01",
+                "62756-798-18",
+                "0115-6922-19",
+                "68180-266-02",
+                "55648-974-04",
+                "0378-1044-01",
+                "55111-533-30",
+                "55648-974-01",
+                "55648-974-02",
+                "55648-974-03",
+                "16714-513-02",
+                "0378-0473-05",
+                "0378-0473-01",
+                "51079-767-01",
+                "55111-533-05",
+                "55111-533-01",
+                "51079-767-08",
+                "65841-637-16",
+                "65841-637-14",
+                "68001-106-03",
+                "55111-534-30",
+                "55111-533-60",
+                "64679-974-01",
+                "65862-403-22",
+                "62756-798-13",
+                "68382-106-01",
+                "64679-974-03",
+                "64679-975-03",
+                "65862-402-39",
+                "68382-031-01",
+                "68382-106-30",
+                "0378-1045-01",
+                "64679-975-04",
+                "0378-0472-05",
+                "0378-0472-01",
+                "55111-532-05",
+                "68382-031-05",
+                "68180-267-02",
+                "68180-265-01",
+                "55111-532-01",
+                "55111-529-30",
+                "0378-1043-05",
+                "0378-1043-01",
+                "55111-533-79",
+                "55111-533-78",
+                "55111-531-30",
+                "16714-511-01",
+                "68180-267-11",
+                "65841-639-30",
+                "55111-532-78",
+                "55111-532-79",
+                "62756-797-18",
+                "0378-0472-77",
+                "0245-0180-89",
+                "62756-797-13"
+              ],
+              "product_type": [
+                "HUMAN PRESCRIPTION DRUG"
+              ],
+              "generic_name": [
+                "DIVALPROEX SODIUM"
+              ],
+              "manufacturer_name": [
+                "Northstar Rx LLC",
+                "Citron Pharma LLC",
+                "Dr. Reddy's Laboratories Ltd",
+                "WOCKHARDT LIMITED",
+                "Zydus Pharmaceuticals (USA) Inc.",
+                "Upsher-Smith Laboratories, Inc.",
+                "Sun Pharmaceutical Industries Limited",
+                "Mylan Pharmaceuticals Inc.",
+                "Global Pharmaceuticals, Division of Impax Laboratories Inc.",
+                "Lupin Pharmaceuticals, Inc.",
+                "WOCKHARDT USA LLC",
+                "Cadila Healthcare Limited",
+                "Mylan Pharmaceutical Inc.",
+                "Watson Pharma, Inc.",
+                "Mylan Institutional Inc.",
+                "Teva Pharmaceuticals USA Inc",
+                "Aurobindo Pharma Limited",
+                "BluePoint Laboratories"
+              ],
+              "brand_name": [
+                "DIVALPROEX SODIUM"
+              ],
+              "application_number": [
+                "ANDA078791",
+                "ANDA090161",
+                "ANDA078597",
+                "ANDA090554",
+                "ANDA079080",
+                "ANDA078239",
+                "ANDA078755",
+                "ANDA078790",
+                "ANDA078182",
+                "ANDA090062",
+                "ANDA077567",
+                "ANDA090407",
+                "ANDA078853",
+                "ANDA078919",
+                "ANDA077296",
+                "ANDA078979",
+                "ANDA077100",
+                "ANDA090070",
+                "ANDA076941"
+              ]
+            }
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "AUGMENTIN '125'"
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "GUAIFENESIN WITH CODEINE"
+          }
+        ]
+      },
+      "receiptdate": "20050228",
+      "transmissiondate": "20050727",
+      "transmissiondateformat": "102",
+      "seriousnesshospitalization": "1",
+      "serious": "1"
+    },
+    {
+      "safetyreportid": "4597138-5",
+      "fulfillexpeditecriteria": "1",
+      "receivedateformat": "102",
+      "receiver": null,
+      "receiptdateformat": "102",
+      "receivedate": "20050223",
+      "primarysource": null,
+      "seriousnessother": "1",
+      "sender": {
+        "senderorganization": "FDA-Public Use"
+      },
+      "patient": {
+        "patientonsetage": "49",
+        "reaction": [
+          {
+            "reactionmeddrapt": "HEPATITIS C VIRUS"
+          }
+        ],
+        "patientonsetageunit": "801",
+        "drug": [
+          {
+            "drugcharacterization": "1",
+            "drugstartdateformat": "102",
+            "drugindication": "FACTOR VIII DEFICIENCY",
+            "medicinalproduct": "HEMOFIL",
+            "drugadministrationroute": "042",
+            "drugdosagetext": "INTRAVENOUS",
+            "drugstartdate": "19730101",
+            "drugenddate": "19800101",
+            "drugenddateformat": "102"
+          },
+          {
+            "drugcharacterization": "1",
+            "drugstartdateformat": "102",
+            "drugindication": "FACTOR VIII DEFICIENCY",
+            "medicinalproduct": "CUTTER FACTOR VIII",
+            "drugadministrationroute": "042",
+            "drugdosagetext": "INTRAVENOUS",
+            "drugstartdate": "19730101",
+            "drugenddate": "19800101",
+            "drugenddateformat": "102"
+          },
+          {
+            "drugcharacterization": "1",
+            "drugstartdateformat": "102",
+            "drugindication": "FACTOR VIII DEFICIENCY",
+            "medicinalproduct": "ALPHA FACTOR VIII",
+            "drugstartdate": "19730101",
+            "drugenddate": "19800101",
+            "drugenddateformat": "102"
+          },
+          {
+            "drugcharacterization": "1",
+            "drugstartdateformat": "102",
+            "drugindication": "FACTOR VIII DEFICIENCY",
+            "medicinalproduct": "ANTIHEMOPHILIC FACTOR (HUMAN)",
+            "drugstartdate": "19730101",
+            "drugenddate": "19800101",
+            "drugenddateformat": "102"
+          },
+          {
+            "drugcharacterization": "1",
+            "drugstartdateformat": "102",
+            "drugindication": "FACTOR VIII DEFICIENCY",
+            "medicinalproduct": "PLASMA",
+            "drugstartdate": "19600101",
+            "drugenddate": "19600101",
+            "drugenddateformat": "102"
+          },
+          {
+            "drugcharacterization": "1",
+            "drugstartdateformat": "102",
+            "drugindication": "FACTOR VIII DEFICIENCY",
+            "medicinalproduct": "CRYOPRECIPITATED AHF",
+            "drugstartdate": "19600101",
+            "drugenddate": "19600101",
+            "drugenddateformat": "102"
+          }
+        ],
+        "patientsex": "1"
+      },
+      "receiptdate": "20050215",
+      "transmissiondate": "20050727",
+      "transmissiondateformat": "102",
+      "serious": "1",
+      "companynumb": "601863"
+    }
+  ]
+}

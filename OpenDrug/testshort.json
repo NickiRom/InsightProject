@@ -1,0 +1,22 @@
+{
+      "safetyreportid": "4595596-3",
+      "fulfillexpeditecriteria": "1",
+      "receivedateformat": "102",
+      "receiver": null,
+      "receiptdateformat": "102",
+      "receivedate": "20050224",
+      "primarysource": {
+        "qualification": "1"
+      },
+      "seriousnessother": "1",
+      "sender": {
+        "senderorganization": "FDA-Public Use"
+      },
+      "bloody": {
+        "hell": "high water",
+        "nose": {
+          "large": "bigger",
+          "small": "smaller"
+        }
+      }
+}

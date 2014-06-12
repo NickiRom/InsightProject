@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "disclaimer": "openFDA is a beta research project and not for clinical use. While we make every effort to ensure that data is accurate, you should assume all results are unvalidated.",
+    "license": "http://open.fda.gov/license",
+    "last_updated": "2014-05-29",
+    "results": {
+      "skip": 0,
+      "limit": 1,
+      "total": 3131313
+    }
+  },
+  "results": [
+    {
+      "safetyreportid": "4595596-3",
+      "fulfillexpeditecriteria": "1",
+      "receivedateformat": "102",
+      "receiver": null,
+      "receiptdateformat": "102",
+      "receivedate": "20050224",
+      "primarysource": {
+        "qualification": "1"
+      },
+      "seriousnessother": "1",
+      "sender": {
+        "senderorganization": "FDA-Public Use"
+      },
+      "patient": {
+        "patientonsetage": "59",
+        "reaction": [
+          {
+            "reactionmeddrapt": "NEPHRITIS HAEMORRHAGIC"
+          }
+        ],
+        "patientonsetageunit": "801",
+        "drug": [
+          {
+            "drugauthorizationnumb": "21565",
+            "drugcharacterization": "1",
+            "medicinalproduct": "ORAL EPINASTINE"
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "ACETYLSALICYLIC ACID"
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "ASCORBIC ACID",
+            "openfda": {
+              "spl_id": [
+                "f67ce1df-27ea-4c67-a8a3-daf3fb3b9a92",
+                "72133842-ac3f-4a39-a825-38e01930a0a7"
+              ],
+              "product_ndc": [
+                "0389-0486",
+                "67457-118",
+                "67457-303"
+              ],
+              "route": [
+                "INTRAMUSCULAR",
+                "INTRAVENOUS",
+                "SUBCUTANEOUS"
+              ],
+              "substance_name": [
+                "ASCORBIC ACID"
+              ],
+              "rxcui": [
+                "308395"
+              ],
+              "spl_set_id": [
+                "a6c36a36-28ee-4a1b-86fe-98ef94064b68",
+                "d05200cb-cf29-4bc7-bf0c-b42ab2d20958"
+              ],
+              "package_ndc": [
+                "67457-118-50",
+                "0389-0486-50",
+                "67457-303-50"
+              ],
+              "product_type": [
+                "HUMAN PRESCRIPTION DRUG"
+              ],
+              "generic_name": [
+                "ASCORBIC ACID"
+              ],
+              "manufacturer_name": [
+                "The Torrance Company",
+                "Mylan Institutional LLC"
+              ],
+              "brand_name": [
+                "ASCORBIC ACID"
+              ]
+            }
+          },
+          {
+            "drugcharacterization": "2",
+            "medicinalproduct": "TOCOPHERYL NICOTINATE"
+          }
+        ],
+        "patientsex": "2"
+      },
+      "receiptdate": "20050208",
+      "transmissiondate": "20050727",
+      "transmissiondateformat": "102",
+      "serious": "1",
+      "companynumb": "200501050"
+    }
+  ]
+}
