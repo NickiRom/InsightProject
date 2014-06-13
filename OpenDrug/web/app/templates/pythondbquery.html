@@ -1,0 +1,16 @@
+{% extends 'layout/base.html'%}
+{% block content %}
+<div id='wrap'>
+	<h3>
+	Thank you for asking about {{query}}!
+	</h3>
+
+	<p>
+	The drug with the most similar side effects is: {{best}} {{bestscore}}
+
+	<p>
+	The drug with the most similar side effects is: {{worst}} {{worstscore}}
+</div>
+
+
+{% endblock %}
