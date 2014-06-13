@@ -14,10 +14,19 @@ records that contain at least one instance of those fields.
 
 
 import requests
-import pandas as pd
 import json
 import pprint
+import time
+import csv
+import datetime
+import math
+import random
+import operator
 
+
+
+
+start_time = time.time()
 #Printer for debugging objects
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -31,7 +40,7 @@ fieldsRequired = ["patient.drug.medicinalproduct","patient.reaction.reactionmedd
 
 
 
-def runQuery(search="",count="", apiKey="", skip = -1, limit=-1, forceFields=True):
+def runQuery(search="",count="", apiKey="", skip = -1, limit=-1, forceFields=True, rootdir=""):
     """Return object from openFDA API query
     
     It is possible to construct a query that returns no results due to improper
@@ -68,6 +77,10 @@ def runQuery(search="",count="", apiKey="", skip = -1, limit=-1, forceFields=Tru
         
         by default set to negative number and ignored. Positive numbers are 
         interpreted
+    
+    rootdir is the path to the directory where the backup jsons will be stored
+        
+        by default set to current directory
     """
     
     #Start constructing the query
@@ -116,7 +129,9 @@ def runQuery(search="",count="", apiKey="", skip = -1, limit=-1, forceFields=Tru
     rtext = requests.get(query).text
     
     #Print out the text for a cache
-    open('lastQuery.json','w').write(rtext)
+    output = open(rootdir+'lastQuery'+str(datetime.datetime.now())+'.json','w')
+    output.write(rtext)
+    output.close()
     
     #Return a python object
     return json.loads(rtext)
@@ -162,19 +177,130 @@ def chewDict( inputDict, setIgnorableKeys=set(), killNone = True):
     return returnDict
 
 
-#Process one array of results
 
-#This could eventually be wrapped into a function to make it a bit prettier
-#but to just get the data out of the API in the fastest way, I'm just going 
-#to hack it together here.
+#Column title sets
+reportCols = [  
+                'report_id',
+                'safetyreportid',
+                'safetyreportversion',
+                'companynumb',
+                'duplicate',
+                'occurcountry',
+                'receiptdate',
+                'receiptdateformat',
+                'receivedate',
+                'receivedateformat',
+                'primarysourcecountry',
+                'qualification',
+                'reportercountry',
+                'duplicatenumb',
+                'duplicatesource',
+                'sendertype',
+                'senderorganization',
+                'receiverorganization',
+                'receivertype',
+                'serious',
+                'seriousnesscongenitalanomali',
+                'seriousnessdeath',
+                'seriousnessdisabling',
+                'seriousnesshospitalization',
+                'seriousnesslifethreatening',
+                'seriousnessother',
+                'transmissiondate',
+                'transmissiondateformat',
+                'patientdeath',
+                'patientdeathdate',
+                'patientdeathdateformat',
+                'patientonsetage',
+                'patientonsetageunit',
+                'patientsex',
+                'patientweight'
+                ]
 
-#results = jsonResult["results"]
+drugReportCols = [    
+                'drug_id',
+                'report_id',
+                'indication_id',
+                'actiondrug',
+                'drugadditional',
+                'drugadministrationroute',
+                'drugauthorizationnumb',
+                'drugbatchnumb',
+                'drugcharacterization',
+                'drugcumulativedosagenumb',
+                'drugcumulativedosageunit',
+                'drugdosageform',
+                'drugdoseagetext',
+                'drugenddate',
+                'drugenddateformat',
+                'drugindication',
+                'drugintervaldosagedefinition',
+                'drugintervaldosageunitnumb',
+                'drugrecurreadministration',
+                'drugseparatedosagenumb',
+                'drugstartdate',
+                'drugstartdateformat',
+                'drugstructuredosagenumb',
+                'drugstructuredosageunit',
+                'drugtreatmentduration',
+                'drugtreatmentdurationunit'
+                ]
 
-#Temporary guy to debug
-#jsonResult = json.loads( open("testOneResult.json",'r').read() )
-#results = [jsonResult]
-jsonResult = json.loads( open("lastQuery.json",'r').read() )
-results = jsonResult["results"]
+reactionReportCols = [
+                'reaction_id',
+                'report_id',
+                'reactionmeddraversionpt',
+                'reactionoutcome'
+                ]
+
+drugCols = [
+                'drug_id',
+                'medicinalproduct',
+                'indication',
+                'pharm_class_epc',
+                'pharm_class_moa'
+                ]
+
+indicationCols = [
+                'indication_id',
+                'drugindication'
+                ]
+
+reactionCols = [
+                'reaction_id',
+                'reactionmeddrapt'
+                ]
+
+
+
+#Setting up output to csvs for later insertion into MySQL
+
+prefix = "year2010"
+reportFile = open(prefix + "reportTable.csv",'w')
+drugReportFile = open(prefix + "drugReportTable.csv",'w')
+reactionReportFile = open(prefix + "reactionReportTable.csv",'w')
+drugFile = open(prefix + "drugTable.csv",'w')
+reactionFile = open(prefix + "reactionTable.csv",'w')
+indicationFile = open(prefix + "indicationTable.csv",'w')
+
+
+
+reportCSV = csv.DictWriter(reportFile, reportCols, extrasaction='ignore')
+drugReportCSV = csv.DictWriter(drugReportFile, drugReportCols, extrasaction='ignore')
+reactionReportCSV = csv.DictWriter(reactionReportFile, reactionReportCols, extrasaction='ignore')
+
+drugCSV = csv.DictWriter(drugFile, drugCols, extrasaction='ignore')
+reactionCSV = csv.DictWriter(reactionFile, reactionCols, extrasaction='ignore')
+indicationCSV = csv.DictWriter(indicationFile, indicationCols, extrasaction='ignore')
+
+
+reportCSV.writeheader()
+drugReportCSV.writeheader()
+reactionReportCSV.writeheader()
+
+drugCSV.writeheader()
+reactionCSV.writeheader()
+indicationCSV.writeheader()
 
 
 #types of keys to avoid
@@ -183,186 +309,321 @@ specialPatientKeys = set( ["reaction", "drug"] )
 specialDrugKeys = set( ["drugindication","medicinalproduct","openfda"] )
 specialReactionKeys = set( ["reactionmeddrapt"] )
 
+drugsHash = {}
+reactionsHash = {}
+indicationsHash = {}
+
 #Set up some indices for the tables, will be MySQL indices for each entity
 currentReportIndex = 0;
 currentDrugIndex = 0;
 currentReactionIndex = 0;
 currentIndicationIndex = 0;
 
-#Set up the dataframes to 
-reportDF = pd.DataFrame()
-drugReportDF = pd.DataFrame()
-reactionReportDF = pd.DataFrame()
 
 
-drugsHash = {}
-reactionsHash = {}
-indicationsHash = {}
 
-for result in results:
-    reportDict = {} #the line that will go into the reports table
-    drugDict = {} #may need this to be different
-    reactionDict = {} #may need a list instead of a dict
-    
-    #This gives me my report table information
-    currentReportIndex += 1;
-    reportDict = chewDict(result, specialReportKeys)
-    reportDict["report_id"] = currentReportIndex
-    
-    #Add patient information to the report table
-    patientDict = chewDict( result["patient"], specialPatientKeys )
-    reportDict.update(patientDict)
-    
-    #At this point, everything in the report that is tied to the top level of
-    #the report is in the reportDict, so add that as a row to the report 
-    #DataFrame that will later be the table for MySQL
-    #This is extremely memory inefficient for large datasets, need to find
-    #a workaround
-    reportDF = reportDF.append(reportDict, ignore_index=True)
-    
-    
-    #Process Drugs
-    drugs = result["patient"]["drug"]
-    
-    for drug in drugs:
-        
-        #if I can't find a medicinal product, I won't bother constructing the
-        #dict
-        if "medicinalproduct" not in drug:
-            continue
+searchString = "receivedate:[20100101+TO+20101231]"
+returnObj = runQuery(search=searchString, limit=100, apiKey=scratchAPIkey)
 
-        #The main key here for all products
-        drugName = drug["medicinalproduct"]
-        
-        #print "Entering drug " + drugName
-        #Sets up for the drug_id -> drug table and makes sure the drug_id 
-        #is unique to generate a normalized set of mysql tables later.
-        if drugName not in drugsHash:
-            #Initialize our drug in the drug hash
-            currentDrugIndex += 1
+
+
+currtime = time.time()
+if "meta" in returnObj:
+    totalRecords = returnObj['meta']['results']['total']
+    totalLoops = int(math.ceil(float(totalRecords)/float(100)))
+    
+
+    
+    for offset in range(0,totalLoops):
+        #Set up the dataframes 
+        reportDF = []
+        drugReportDF = []
+        reactionReportDF = []
+        print "Scanned "+str(offset*100)+" of "+str(totalRecords)+" records in", time.time() - start_time , "seconds."
+        if (time.time() - currtime) > 0.5:
             
-            drugsHash[drugName] = {"drug_id": currentDrugIndex}
+            time.sleep(max(0.5,0.5-(time.time()-currtime))+random.random())
         
-        drugDict["drug_id"] = drugsHash[drugName]["drug_id"]
+        currtime = time.time()
         
-        #I want to keep drug indication but to turn it into a normalized 
-        #table as well. Will add the indication to a set inside the 
-        #drugsHash as well for convenience, can decide later how to deal 
-        #with the data
-        if "drugindication" in drug:
+        returnObj = runQuery(search=searchString, limit=100, skip=(offset*100), 
+                             apiKey=scratchAPIkey, rootdir="/Volumes/NPT-HD1/openFDAset1/")
+        
+        #fail inelegantly
+        if not 'meta' in returnObj:
+            break
+        
+        results = returnObj['results']
+        
+        
+        #Process one array of results
+
+        #This could eventually be wrapped into a function to make it a bit prettier
+        #but to just get the data out of the API in the fastest way, I'm just going 
+        #to hack it together here.
+        
+        
+        for result in results:
+        
             
-            indication = drug["drugindication"]
-            if "indications" not in drugsHash[drugName]:
-                drugsHash[drugName]["indications"] = set()
+            reportDict = {} #the line that will go into the reports table
+            drugDict = {} #may need this to be different
+            reactionDict = {} #may need a list instead of a dict
             
-            if indication not in indicationsHash:
-                currentIndicationIndex += 1
-                indicationsHash[indication] = {"indication_id": currentIndicationIndex}
-        
-            drugsHash[drugName]["indications"].add(indication)
-            drugDict["indication_id"] = indicationsHash[indication]["indication_id"]
+            #This gives me my report table information
+            currentReportIndex += 1;
+            reportDict = chewDict(result, specialReportKeys)
+            reportDict["report_id"] = currentReportIndex
             
+            #Add patient information to the report table
+            patientDict = chewDict( result["patient"], specialPatientKeys )
+            reportDict.update(patientDict)
             
-        drugDict.update( chewDict(drug, specialDrugKeys) )
-        drugDict["report_id"] = currentReportIndex
+            #At this point, everything in the report that is tied to the top level of
+            #the report is in the reportDict, so add that as a row to the report 
+            #DataFrame that will later be the table for MySQL
+            #This is extremely memory inefficient for large datasets, need to find
+            #a workaround
         
-        #Drug entry should be ready for the MySQL table at this point, so 
-        #add it to the drug table
-        #This is extremely memory inefficient for large datasets, need to find
-        #a workaround
-        drugReportDF = drugReportDF.append(drugDict, ignore_index=True)
-        #pp.pprint(drugDict)
+            reportDF.append(dict(reportDict))
+            
         
         
-        #If there's an openFDA section, try and capture that information
-        #this overwrites certain things, may not be production ready
-        if "openfda" in drug:
-            if "pharm_class_epc" in drug["openfda"]:
-                #I know that some drugs may have more than one class,
-                #I'm hoping that the first one will be sufficient 
-                drugsHash[drugName]["openfdaPharmClass"] = drug["openfda"]["pharm_class_epc"][0]
+        
+            #Process Drugs
+            drugs = result["patient"]["drug"]
+            
+            for drug in drugs:
                 
-                if "openfdaAllParmClass" in drugsHash[drugName]:
-                    drugsHash[drugName]["openfdaAllParmClass"].update(drug["openfda"]["pharm_class_epc"])
-                else:
-                    drugsHash[drugName]["openfdaAllParmClass"] = set(drug["openfda"]["pharm_class_epc"])
+                #if I can't find a medicinal product, I won't bother processing it
+                if "medicinalproduct" not in drug:
+                    continue
+        
+                #The main key here for all products
+                drugName = drug["medicinalproduct"]
+                
+                #print "Entering drug " + drugName
+                #Sets up for the drug_id -> drug table and makes sure the drug_id 
+                #is unique to generate a normalized set of mysql tables later.
+                if drugName not in drugsHash:
+                    #Initialize our drug in the drug hash
+                    currentDrugIndex += 1
                     
-            if "generic_name" in drug["openfda"]:
-                drugsHash[drugName]["openfdaGenericName"] = drug["openfda"]["generic_name"][0]
-            if "brand_name" in drug["openfda"]:
-                drugsHash[drugName]["openfdaBrandName"] = drug["openfda"]["brand_name"][0]          
-            if "rxcui" in drug["openfda"]:
-                #I know that some drugs have more than one rxcui.
-                #I'm hoping that the first one will be sufficient to look 
-                #up other information
-                drugsHash[drugName]["openfdaRxcui"] = drug["openfda"]["rxcui"][0]
-                if "openfdaAllRxcui" in drugsHash[drugName]:
-                    drugsHash[drugName]["openfdaAllRxcui"].update(drug["openfda"]["rxcui"])
-                else:
-                    drugsHash[drugName]["openfdaAllRxcui"] = set(drug["openfda"]["rxcui"])  
+                    drugsHash[drugName] = {"drug_id": currentDrugIndex}
                 
-            if "unii" in drug["openfda"]:
-                if "openfdaAllUnii" in drugsHash[drugName]:
-                    drugsHash[drugName]["openfdaAllUnii"].update(drug["openfda"]["unii"])
-                else:
-                    drugsHash[drugName]["openfdaAllUnii"] = set(drug["openfda"]["unii"])
+                drugDict["drug_id"] = drugsHash[drugName]["drug_id"]
+                
+                #I want to keep drug indication but to turn it into a normalized 
+                #table as well. Will add the indication to a set inside the 
+                #drugsHash as well for convenience, can decide later how to deal 
+                #with the data
+                if "drugindication" in drug:
                     
-                #may want to figure out how to deal with SPL and NDC codes 
-                #later
+                    
+                    
+                    indication = drug["drugindication"]
+        
+                    
+                    if not (indication.lower() == "product used for unknown indication" or
+                        indication.lower() == "drug use for unknown indication"):
+                    
+                        if "indications" not in drugsHash[drugName]:
+                            drugsHash[drugName]["indications"] = {indication:0}
+                        elif indication not in drugsHash[drugName]["indications"]:
+                            drugsHash[drugName]["indications"][indication] = 0
+                            
+                        if indication not in indicationsHash:
+                            currentIndicationIndex += 1
+                            indicationsHash[indication] = {"indication_id": currentIndicationIndex}
+                    
+                        drugsHash[drugName]["indications"][indication] += 1
+                        drugDict["indication_id"] = indicationsHash[indication]["indication_id"]
+                    
+                    
+                drugDict.update( chewDict(drug, specialDrugKeys) )
+                drugDict["report_id"] = currentReportIndex
                 
-            #END OF OPENFDA DRUG SECTION
+                #Drug entry should be ready for the MySQL table at this point, so 
+                #add it to the drug table
+                drugReportDF.append(dict(drugDict))
+                
+                
+                #This is extremely memory inefficient for large datasets, need to find
+                #a workaround
+                
+                #drugReportDF.append(dict(drugDict))
+                
         
-        #Need to set up the drugDict for the next entry in the drug section of
-        #the report
-        drugDict.clear()
+                
+                
+                #If there's an openFDA section, try and capture that information
+                #this overwrites certain things, may not be production ready
+                if "openfda" in drug:
+                    if "pharm_class_moa" in drug["openfda"]:
+                        #I know that some drugs may have more than one class,
+                        #I'm hoping that the first one will be sufficient 
+                        drugsHash[drugName]["openfdaPharmClassMOA"] = drug["openfda"]["pharm_class_moa"][0]
+                        
+                        if "openfdaAllParmClassMOA" in drugsHash[drugName]:
+                            drugsHash[drugName]["openfdaAllParmClassMOA"].update(dict.fromkeys(drug["openfda"]["pharm_class_moa"]))
+                        else:
+                            drugsHash[drugName]["openfdaAllParmClassMOA"] = dict.fromkeys(drug["openfda"]["pharm_class_moa"])
+                    
+                    if "pharm_class_epc" in drug["openfda"]:
+                        #I know that some drugs may have more than one class,
+                        #I'm hoping that the first one will be sufficient 
+                        drugsHash[drugName]["openfdaPharmClass"] = drug["openfda"]["pharm_class_epc"][0]
+                        
+                        if "openfdaAllParmClass" in drugsHash[drugName]:
+                            drugsHash[drugName]["openfdaAllParmClass"].update(dict.fromkeys(drug["openfda"]["pharm_class_epc"]))
+                        else:
+                            drugsHash[drugName]["openfdaAllParmClass"] = dict.fromkeys(drug["openfda"]["pharm_class_epc"])
+                    if "generic_name" in drug["openfda"]:
+                        drugsHash[drugName]["openfdaGenericName"] = drug["openfda"]["generic_name"][0]
+                    if "brand_name" in drug["openfda"]:
+                        drugsHash[drugName]["openfdaBrandName"] = drug["openfda"]["brand_name"][0]          
+                    if "rxcui" in drug["openfda"]:
+                        #I know that some drugs have more than one rxcui.
+                        #I'm hoping that the first one will be sufficient to look 
+                        #up other information
+                        drugsHash[drugName]["openfdaRxcui"] = drug["openfda"]["rxcui"][0]
+                        if "openfdaAllRxcui" in drugsHash[drugName]:
+                            drugsHash[drugName]["openfdaAllRxcui"].update(dict.fromkeys(drug["openfda"]["rxcui"]))
+                        else:
+                            drugsHash[drugName]["openfdaAllRxcui"] = dict.fromkeys(drug["openfda"]["rxcui"])  
+                        
+                    if "unii" in drug["openfda"]:
+                        if "openfdaAllUnii" in drugsHash[drugName]:
+                            drugsHash[drugName]["openfdaAllUnii"].update(dict.fromkeys(drug["openfda"]["unii"]))
+                        else:
+                            drugsHash[drugName]["openfdaAllUnii"] = dict.fromkeys(drug["openfda"]["unii"])
+                            
+                        #may want to figure out how to deal with SPL and NDC codes 
+                        #later
+                        
+                    #END OF OPENFDA DRUG SECTION
+                
+                #Need to set up the drugDict for the next entry in the drug section of
+                #the report
+                drugDict.clear()
+                
+                #END DRUG PROCESSING LOOP
+            
+            
+            #Process reactions
+            reactions = result["patient"]["reaction"]
+            
+            for reaction in reactions:
+                
+                #if the reaction doesn't have a name, skip the reaction entirely
+                if "reactionmeddrapt" not in reaction:
+                    continue
+                
+                #The main key for a given reaction
+                reactionName = reaction["reactionmeddrapt"]
+                
         
-        #END DRUG PROCESSING LOOP
-    
-    
-    #Process reactions
-    reactions = result["patient"]["reaction"]
-    
-    for reaction in reactions:
-        
-        #if the reaction doesn't have a name, skip the reaction entirely
-        if "reactionmeddrapt" not in reaction:
-            continue
-    
-        #The main key for a given reaction
-        reactionName = reaction["reactionmeddrapt"]
-        
-        
-        #Sets up for the reaction_id -> reaction table and makes sure the
-        #reaction_id is unique to each reaction name unique to generate 
-        #a normalized set of mysql tables later.
-        if reactionName not in reactionsHash:
-            #Initialize our reaction in the reactions hash
-            currentReactionIndex += 1
-            reactionsHash[reactionName] = {"reaction_id": currentReactionIndex}
-        
-        reactionDict["reaction_id"] = reactionsHash[reactionName]["reaction_id"]
-        
-         
-        reactionDict.update( chewDict(reaction, specialReactionKeys) )
-        reactionDict["report_id"] = currentReportIndex
-        
-        #Drug entry should be ready for the MySQL table at this point, so add
-        #it to the drug table
-        #This is extremely memory inefficient for large datasets, need to find
-        #a workaround
-        reactionReportDF = reactionReportDF.append(reactionDict, ignore_index=True)
-    
-        #Set up reactions dict for next cycle of the loop
-        
-        reactionDict.clear()
-        
-    
-    reportDict.clear()
+                #Sets up for the reaction_id -> reaction table and makes sure the
+                #reaction_id is unique to each reaction name unique to generate 
+                #a normalized set of mysql tables later.
+                if reactionName not in reactionsHash:
+                    #Initialize our reaction in the reactions hash
+                    currentReactionIndex += 1
+                    reactionsHash[reactionName] = {"reaction_id": currentReactionIndex}
+                
+                reactionDict["reaction_id"] = reactionsHash[reactionName]["reaction_id"]
+                
+                 
+                reactionDict.update( chewDict(reaction, specialReactionKeys) )
+                reactionDict["report_id"] = currentReportIndex
+                
+                #Drug entry should be ready for the MySQL table at this point, so add
+                #it to the drug table
+                #This is extremely memory inefficient for large datasets, need to find
+                #a workaround
 
-print "REPORT TABLE:\n", reportDF
-print "DRUG TABLE:\n", drugReportDF
-print "REACTION TABLE:\n", reactionReportDF
+                reactionReportDF.append(dict(reactionDict))
+            
+                #Set up reactions dict for next cycle of the loop
+                
+                reactionDict.clear()
+                
+            
+            reportDict.clear()
+        
+        
+        reportCSV.writerows(reportDF)
+        drugReportCSV.writerows(drugReportDF)
+        reactionReportCSV.writerows(reactionReportDF)
 
+
+
+outputDrugDict = {}
+outputDrugTable = []
+for key in drugsHash:
+    outputDrugDict = {'drug_id':drugsHash[key]['drug_id'], 'medicinalproduct':key, }
+    if 'indications' in drugsHash[key]:
+        topIndication = sorted(drugsHash[key]['indications'].iteritems(), key=operator.itemgetter(1))[0][0]
+        outputDrugDict['indication']=topIndication
+        
+    if 'openfdaPharmClass' in drugsHash[key]:
+        outputDrugDict['pharm_class_epc'] = drugsHash[key]['openfdaPharmClass']
+        
+    if 'openfdaPharmClassMOA' in drugsHash[key]:
+        outputDrugDict['pharm_class_moa'] = drugsHash[key]['openfdaPharmClassMOA']
+        
+        
+    outputDrugTable.append(dict(outputDrugDict))
+    outputDrugDict.clear()
+
+outputReactionTable = []
+for key in reactionsHash:
+    outputReactionTable.append({'reaction_id':reactionsHash[key]['reaction_id'], 'reactionmeddrapt':key } )
+
+outputIndicationTable = []
+for key in indicationsHash:
+    outputIndicationTable.append({'indication_id':indicationsHash[key]['indication_id'], 'drugindication':key } )
+
+
+
+
+print "Done scanning after", time.time() - start_time, "seconds"
+
+
+
+drugCSV.writerows(outputDrugTable)
+reactionCSV.writerows(outputReactionTable)
+indicationCSV.writerows(outputIndicationTable)
+
+drugHashFile = open("drugHashFile"+str(datetime.datetime.now())+".json", 'w')
+drugHashFile.write(json.dumps(drugsHash, sort_keys=True, indent=4, separators=(',', ': ')))
+drugHashFile.close()
+
+reportFile.close()
+drugReportFile.close()
+reactionReportFile.close()
+drugFile.close()
+reactionFile.close()
+indicationFile.close()
+
+print "Finally after", time.time() - start_time, "seconds"
+print "DONE!!!!!\n\n\n\n"
+
+'''
+pp.pprint(reportDF)
+pp.pprint(drugReportDF)
+pp.pprint(reactionReportDF)
+'''
+'''    
+print "REPORT TABLE:\n", pd.DataFrame.from_dict(reportDF).columns.values
+print "DRUG TABLE:\n", pd.DataFrame.from_dict(drugReportDF).columns.values
+print "REACTION TABLE:\n", pd.DataFrame.from_dict(reactionReportDF).columns.values
+'''
+'''
+reportDF.to_csv("reportDF.csv")
+drugReportDF.to_csv("drugReportDF.csv")
+reactionReportDF.to_csv("reactionReportDF.csv")
+'''
     
 
 
